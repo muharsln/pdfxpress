@@ -38,20 +38,9 @@ export interface ToastMessage {
 
 export interface OpenDialogOptions {
   title?: string;
-  defaultPath?: string;
   filters?: Array<{
     name: string;
     extensions: string[];
   }>;
   multiple?: boolean;
-  directory?: boolean;
-}
-
-export interface SaveDialogOptions {
-  title?: string;
-  defaultPath?: string;
-  filters?: Array<{
-    name: string;
-    extensions: string[];
-  }>;
 }

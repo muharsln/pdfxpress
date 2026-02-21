@@ -2,7 +2,7 @@ import { signalStore, withState, withComputed, withMethods, patchState } from '@
 import { computed, inject } from '@angular/core';
 import { PdfFile } from '../../core/models/pdf-file.model';
 import { PdfLibService } from '../../core/services/pdf-lib.service';
-import { TauriFsService } from '../../core/services/tauri-fs.service';
+import { FileSystemService } from '../../core/services/file-system.service';
 
 export interface MergerState {
   files: PdfFile[];
@@ -28,7 +28,7 @@ export const MergerStore = signalStore(
   })),
   withMethods((store) => {
     const pdfService = inject(PdfLibService);
-    const fsService = inject(TauriFsService);
+    const fsService = inject(FileSystemService);
 
     return {
       addFiles: async (newFiles: File[]) => {
@@ -74,16 +74,7 @@ export const MergerStore = signalStore(
             patchState(store, { progress });
           });
 
-          const savePath = await fsService.saveFilePicker({
-            title: 'Save Merged PDF',
-            defaultPath: 'merged.pdf',
-          });
-
-          if (savePath) {
-            await fsService.writeFile(savePath, merged);
-          } else {
-            fsService.downloadFile(merged, 'merged.pdf');
-          }
+          fsService.downloadFile(merged, 'merged.pdf');
 
           patchState(store, { isProcessing: false, progress: 100 });
         } catch (error: any) {

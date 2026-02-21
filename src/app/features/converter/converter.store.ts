@@ -2,7 +2,7 @@ import { signalStore, withState, withMethods, patchState } from '@ngrx/signals';
 import { inject } from '@angular/core';
 import { PdfLibService } from '../../core/services/pdf-lib.service';
 import { PdfRenderService } from '../../core/services/pdf-render.service';
-import { TauriFsService } from '../../core/services/tauri-fs.service';
+import { FileSystemService } from '../../core/services/file-system.service';
 import { PageRange } from '../../core/models/worker-types';
 
 export type ConverterMode = 'pdf-to-image' | 'image-to-pdf';
@@ -40,7 +40,7 @@ export const ConverterStore = signalStore(
   withMethods((store) => {
     const pdfService = inject(PdfLibService);
     const renderService = inject(PdfRenderService);
-    const fsService = inject(TauriFsService);
+    const fsService = inject(FileSystemService);
 
     return {
       setMode: (mode: ConverterMode) => {
@@ -110,33 +110,52 @@ export const ConverterStore = signalStore(
           const quality = store.imageQuality();
           const total = pagesToRender.length;
 
-          const JSZip = (await import('jszip')).default;
-          const zip = new JSZip();
+          if (total === 1) {
+            const pageNum = pagesToRender[0];
+            const renderWidth = Math.max(300, Math.round((quality / 100) * 3000));
+            const dataUrl = await renderService.renderPage(file, pageNum, renderWidth, format, quality / 100);
 
-          for (let i = 0; i < total; i++) {
-            const pageNum = pagesToRender[i];
-            const dataUrl = await renderService.renderPage(file, pageNum, 1200, format, quality / 100);
-
-            // Extract base64 data to add to zip
             const base64Data = dataUrl.split(',')[1];
-            zip.file(`page_${pageNum}.${format}`, base64Data, { base64: true });
+            const binaryString = window.atob(base64Data);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let j = 0; j < len; j++) {
+              bytes[j] = binaryString.charCodeAt(j);
+            }
 
-            patchState(store, { progress: Math.round(((i + 1) / total) * 90) }); // Allocate 90% for rendering
+            fsService.downloadFile(
+              bytes,
+              `${file.name.replace('.pdf', '')}_page_${pageNum}.${format}`,
+              `image/${format}`
+            );
+          } else {
+            const JSZip = (await import('jszip')).default;
+            const zip = new JSZip();
+
+            for (let i = 0; i < total; i++) {
+              const pageNum = pagesToRender[i];
+              const renderWidth = Math.max(300, Math.round((quality / 100) * 3000));
+              const dataUrl = await renderService.renderPage(file, pageNum, renderWidth, format, quality / 100);
+
+              const base64Data = dataUrl.split(',')[1];
+              zip.file(`page_${pageNum}.${format}`, base64Data, { base64: true });
+
+              patchState(store, { progress: Math.round(((i + 1) / total) * 90) });
+            }
+
+            const zipBytes = await zip.generateAsync({
+              type: 'uint8array',
+              compression: 'STORE'
+            }, (metadata) => {
+              patchState(store, { progress: 90 + Math.round(metadata.percent * 0.1) });
+            });
+
+            fsService.downloadFile(
+              zipBytes,
+              `${file.name.replace('.pdf', '')}_images.zip`,
+              'application/zip'
+            );
           }
-
-          // Generate the zip and download using fsService
-          const zipBytes = await zip.generateAsync({
-            type: 'uint8array',
-            compression: 'STORE' // No need to compress JPEGs/PNGs further, saves time
-          }, (metadata) => {
-            patchState(store, { progress: 90 + Math.round(metadata.percent * 0.1) });
-          });
-
-          fsService.downloadFile(
-            zipBytes,
-            `${file.name.replace('.pdf', '')}_images.zip`,
-            'application/zip'
-          );
 
           patchState(store, { isProcessing: false, progress: 100 });
         } catch (error: any) {

@@ -17,8 +17,8 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
       background: var(--sidebar-bg);
       border-right: 1px solid var(--sidebar-border);
       display: flex; flex-direction: column;
-      height: 100vh; overflow: hidden;
-      position: relative;
+      height: 100vh; overflow: visible;
+      position: relative; z-index: 20;
     }
     main {
       height: 100vh;
@@ -69,20 +69,24 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
     .theme-btn {
       display:flex; align-items:center; gap:10px; width:100%;
       padding:10px 12px; border-radius:10px;
-      font-size:14px; font-weight:600; color:var(--text-3);
-      transition:background .15s, color .15s; cursor:pointer;
+      font-size:14px; font-weight:600; color:var(--text-2);
+      transition:background .2s var(--ease), color .2s var(--ease); cursor:pointer;
     }
-    .theme-btn:hover { background:var(--surface-2); color:var(--text-2); }
+    .theme-btn:hover { background:var(--surface-2); color:var(--text); }
     .collapse-btn {
-      position:absolute; right:-13px; top:72px;
-      width:26px; height:26px; border-radius:50%;
-      background:var(--surface); border:1px solid var(--border);
+      position:absolute; right:-14px; top:72px;
+      width:28px; height:28px; border-radius:50%;
+      background:var(--bg); border:1px solid var(--border-2);
       display:flex; align-items:center; justify-content:center;
-      color:var(--text-3); font-size:14px; cursor:pointer;
-      box-shadow:var(--shadow-sm);
-      transition:border-color .15s, color .15s; z-index:10;
+      color:var(--text-3); font-size:16px; cursor:pointer;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.05);
+      transition:all .2s var(--ease); z-index:10;
     }
-    .collapse-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .collapse-btn:hover {
+      background:var(--accent); border-color:var(--accent);
+      color:#fff;
+      transform:scale(1.1); box-shadow:var(--shadow-md);
+    }
     .mobile-bar {
       display:none; height:56px; padding:0 16px;
       align-items:center; gap:12px;
@@ -129,7 +133,15 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
             </div>
           }
           <button class="collapse-btn" (click)="collapsed.set(!collapsed())">
-            {{ collapsed() ? '›' : '‹' }}
+            @if (collapsed()) {
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m9 18 6-6-6-6"/>
+              </svg>
+            } @else {
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m15 18-6-6 6-6"/>
+              </svg>
+            }
           </button>
         </div>
 

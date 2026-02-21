@@ -4,7 +4,7 @@ import { PdfFile } from '../../core/models/pdf-file.model';
 import { PageItem, createPageItem } from '../../core/models/page-item.model';
 import { PdfLibService } from '../../core/services/pdf-lib.service';
 import { PdfRenderService } from '../../core/services/pdf-render.service';
-import { TauriFsService } from '../../core/services/tauri-fs.service';
+import { FileSystemService } from '../../core/services/file-system.service';
 
 export interface OrganizerState {
   file: PdfFile | null;
@@ -32,7 +32,7 @@ export const OrganizerStore = signalStore(
   withMethods((store) => {
     const pdfService = inject(PdfLibService);
     const renderService = inject(PdfRenderService);
-    const fsService = inject(TauriFsService);
+    const fsService = inject(FileSystemService);
 
     return {
       setFile: async (file: File, width = 150) => {
@@ -177,16 +177,7 @@ export const OrganizerStore = signalStore(
 
           const data = await pdfService.organizePdf(file.file, pageOrder, rotations);
 
-          const savePath = await fsService.saveFilePicker({
-            title: 'Save Organized PDF',
-            defaultPath: `${file.name}_organized.pdf`,
-          });
-
-          if (savePath) {
-            await fsService.writeFile(savePath, data);
-          } else {
-            fsService.downloadFile(data, `${file.name}_organized.pdf`);
-          }
+          fsService.downloadFile(data, `${file.name}_organized.pdf`);
 
           patchState(store, { isProcessing: false, progress: 100 });
         } catch (error: any) {

@@ -180,7 +180,7 @@ import { ConverterStore } from './converter.store';
                 </select>
               </div>
               <div class="option-group">
-                <label class="option-label">Kalite</label>
+                <label class="option-label">Çözünürlük & Kalite</label>
                 <div class="quality-row">
                   <input class="quality-slider" type="range" min="10" max="100"
                          [ngModel]="store.imageQuality()" (ngModelChange)="store.setImageQuality($event)">

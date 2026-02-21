@@ -3,7 +3,7 @@ import { computed, inject } from '@angular/core';
 import { PdfFile } from '../../core/models/pdf-file.model';
 import { PageRange } from '../../core/models/worker-types';
 import { PdfLibService } from '../../core/services/pdf-lib.service';
-import { TauriFsService } from '../../core/services/tauri-fs.service';
+import { FileSystemService } from '../../core/services/file-system.service';
 
 export type SplitMode = 'range' | 'burst' | 'fixed';
 
@@ -34,8 +34,8 @@ export const SplitterStore = signalStore(
   withState(initialState),
   withMethods((store) => {
     const pdfService = inject(PdfLibService);
-    const fsService = inject(TauriFsService);
-    
+    const fsService = inject(FileSystemService);
+
     return {
       setFile: async (file: File) => {
         const pageCount = await pdfService.getPageCount(file);
@@ -49,36 +49,36 @@ export const SplitterStore = signalStore(
         };
         patchState(store, { file: pdfFile, filenamePrefix: pdfFile.name });
       },
-      
+
       setMode: (mode: SplitMode) => {
         patchState(store, { mode });
       },
-      
+
       setRangeInput: (input: string) => {
         patchState(store, { rangeInput: input });
       },
-      
+
       setFixedSize: (size: number) => {
         patchState(store, { fixedSize: size });
       },
-      
+
       setFilenamePrefix: (prefix: string) => {
         patchState(store, { filenamePrefix: prefix });
       },
-      
+
       clearFile: () => {
         patchState(store, { file: null, rangeInput: '1' });
       },
-      
+
       split: async () => {
         const file = store.file();
         if (!file) return;
-        
+
         patchState(store, { isProcessing: true, progress: 0, error: null });
-        
+
         try {
           let ranges: PageRange[];
-          
+
           if (store.mode() === 'burst') {
             ranges = Array.from({ length: file.pageCount }, (_, i) => ({
               start: i + 1,
@@ -96,54 +96,35 @@ export const SplitterStore = signalStore(
           } else {
             ranges = parseRangeString(store.rangeInput(), file.pageCount);
           }
-          
+
           if (ranges.length === 0) {
             throw new Error('No valid page ranges specified');
           }
-          
+
           const results = await pdfService.splitPdf(
-            file.file, 
-            ranges, 
+            file.file,
+            ranges,
             store.filenamePrefix()
           );
-          
-          if (!fsService.isTauri()) {
-            results.forEach(r => fsService.downloadFile(r.data, r.filename));
-            patchState(store, { isProcessing: false, progress: 100 });
-            return;
-          }
-          
-          const folderPath = await fsService.openFolderPicker();
-          
-          if (!folderPath) {
-            results.forEach(r => fsService.downloadFile(r.data, r.filename));
-            patchState(store, { isProcessing: false, progress: 100 });
-            return;
-          }
-          
-          for (let i = 0; i < results.length; i++) {
-            const result = results[i];
-            const outputPath = `${folderPath}/${result.filename}`;
-            
-            await fsService.writeFile(outputPath, result.data);
-            patchState(store, { 
-              progress: Math.round(((i + 1) / results.length) * 100) 
-            });
-          }
-          
+
+          results.forEach((r, i) => {
+            fsService.downloadFile(r.data, r.filename);
+            patchState(store, { progress: Math.round(((i + 1) / results.length) * 100) });
+          });
+
           patchState(store, { isProcessing: false, progress: 100 });
         } catch (error: any) {
-          patchState(store, { 
-            isProcessing: false, 
-            error: error.message || 'Failed to split PDF' 
+          patchState(store, {
+            isProcessing: false,
+            error: error.message || 'Failed to split PDF'
           });
         }
       },
-      
+
       cancel: () => {
         patchState(store, { isProcessing: false, progress: 0 });
       },
-      
+
       clearError: () => {
         patchState(store, { error: null });
       },
@@ -154,13 +135,13 @@ export const SplitterStore = signalStore(
 function parseRangeString(input: string, maxPages: number): PageRange[] {
   const ranges: PageRange[] = [];
   const parts = input.split(',').map(s => s.trim());
-  
+
   for (const part of parts) {
     if (part.includes('-')) {
       const [startStr, endStr] = part.split('-').map(s => s.trim());
       const start = parseInt(startStr, 10);
       const end = endStr.toLowerCase() === 'end' ? maxPages : parseInt(endStr, 10);
-      
+
       if (!isNaN(start) && !isNaN(end) && start > 0 && end <= maxPages && start <= end) {
         ranges.push({ start, end });
       }
@@ -171,6 +152,6 @@ function parseRangeString(input: string, maxPages: number): PageRange[] {
       }
     }
   }
-  
+
   return ranges.sort((a, b) => a.start - b.start);
 }

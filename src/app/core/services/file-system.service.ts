@@ -1,21 +1,13 @@
 import { Injectable } from '@angular/core';
-import type { OpenDialogOptions, SaveDialogOptions } from '../models/pdf-file.model';
+import type { OpenDialogOptions } from '../models/pdf-file.model';
 
-export interface ITauriFsService {
-  isTauri(): boolean;
+export interface IFileSystemService {
   openFilePicker(options?: OpenDialogOptions): Promise<string[] | null>;
-  saveFilePicker(options?: SaveDialogOptions): Promise<string | null>;
-  openFolderPicker(): Promise<string | null>;
-  writeFile(path: string, data: Uint8Array): Promise<void>;
   downloadFile(data: Uint8Array, filename: string, mimeType?: string): void;
 }
 
 @Injectable({ providedIn: 'root' })
-export class TauriFsService implements ITauriFsService {
-  isTauri(): boolean {
-    return false;
-  }
-
+export class FileSystemService implements IFileSystemService {
   async openFilePicker(options?: OpenDialogOptions): Promise<string[] | null> {
     return new Promise((resolve) => {
       const input = document.createElement('input');
@@ -39,22 +31,7 @@ export class TauriFsService implements ITauriFsService {
     });
   }
 
-  async saveFilePicker(options?: SaveDialogOptions): Promise<string | null> {
-    // In web mode, we don't have native save dialogs, so return null
-    // This forces caller stores to fallback to the browser's download prompt.
-    return null;
-  }
-
-  async openFolderPicker(): Promise<string | null> {
-    return null;
-  }
-
-  async writeFile(path: string, data: Uint8Array): Promise<void> {
-    console.log('Writing file to:', path, 'Size:', data.length);
-  }
-
   downloadFile(data: Uint8Array, filename: string, mimeType: string = 'application/pdf'): void {
-
     const blob = new Blob([new Uint8Array(data)], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
