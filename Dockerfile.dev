@@ -1,0 +1,18 @@
+FROM node:22-alpine
+
+WORKDIR /app
+
+# Install Chrome for Angular tests
+RUN apk add --no-cache chromium chromium-chromedriver
+
+ENV CHROME_BIN=/usr/bin/chromium-browser
+ENV CHROMEDRIVER_PATH=/usr/bin/chromedriver
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+
+EXPOSE 4200
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

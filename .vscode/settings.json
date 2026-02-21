@@ -1,0 +1,11 @@
+{
+    // Disable the built-in CSS validator so it does not flag
+    // Tailwind v4 at-rules (@theme, @variant, @utility, etc.)
+    "css.validate": false,
+    "less.validate": false,
+    "scss.validate": false,
+    // If you have the official Tailwind CSS IntelliSense extension,
+    // this tells it where your entry CSS file is so it provides
+    // auto-complete for @theme tokens, class names, etc.
+    "tailwindCSS.experimental.configFile": "./src/styles.css"
+}
