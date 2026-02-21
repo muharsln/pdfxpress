@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as pdfjsLib from 'pdfjs-dist';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.mjs';
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 export interface IPdfRenderService {
   renderPage(file: File, pageNumber: number, width: number, format?: string, quality?: number): Promise<string>;

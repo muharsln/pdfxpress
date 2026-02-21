@@ -70,33 +70,7 @@ export const OrganizerStore = signalStore(
         }
       },
 
-      rerenderThumbnails: async (width: number) => {
-        const file = store.file();
-        if (!file) return;
 
-        const currentPages = store.pages();
-
-        const oldUrls = currentPages
-          .map(p => p.thumbnailUrl)
-          .filter((u): u is string => u !== null);
-        renderService.revokeUrls(oldUrls);
-
-        const pages = currentPages.map(p => ({
-          ...p,
-          thumbnailUrl: null,
-          loading: true,
-        }));
-        patchState(store, { pages });
-
-        const thumbnails = await renderService.renderAllPages(file.file, width);
-
-        const updatedPages = currentPages.map(p => ({
-          ...p,
-          thumbnailUrl: thumbnails.get(p.pageNumber) || null,
-          loading: false,
-        }));
-        patchState(store, { pages: updatedPages });
-      },
 
       clearFile: () => {
         const urls = store.pages()

@@ -84,7 +84,7 @@ import { Component, input, output, signal } from '@angular/core';
 })
 export class DropZoneComponent {
   files = output<File[]>();
-  accept = input('.pdf');
+  accept = input('.pdf,application/pdf');
   multiple = input(true);
   title = input('');
   compact = input(false);
@@ -119,10 +119,21 @@ export class DropZoneComponent {
   private filter(files: File[]) {
     const a = this.accept();
     if (!a || a === '*') return files;
+
+    // Convert accept inputs like '.pdf' to a safe array
     const exts = a.split(',').map(s => s.trim().toLowerCase());
+
     return files.filter(f => {
-      const ext = f.name.toLowerCase().slice(f.name.lastIndexOf('.'));
-      return exts.some(e => e.startsWith('.') ? ext === e : f.type.toLowerCase().includes(e));
+      // Check MIME type natively (best for cross-platform/long-names)
+      if (f.type.toLowerCase() === 'application/pdf') return true;
+      if (f.type.toLowerCase().includes('pdf')) return true;
+
+      // Safe Regex fallback for extensions, overcoming Turkish locale 'I/i' lowercasing bugs
+      const match = f.name.match(/\.([a-zA-Z0-9]+)$/i);
+      if (!match) return false;
+
+      const ext = `.${match[1].toLowerCase()}`;
+      return exts.some(e => e.includes(ext) || ext.includes(e));
     });
   }
 }

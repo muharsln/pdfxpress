@@ -32,11 +32,25 @@ export class FileSystemService implements IFileSystemService {
   }
 
   downloadFile(data: Uint8Array, filename: string, mimeType: string = 'application/pdf'): void {
+    // Sanitize filename to prevent OS silent download failures for long/invalid names
+    let safeName = filename.replace(/[<>:"\/\\|?*\x00-\x1F]/g, '_');
+
+    // Windows path limit max safe boundary is ~255, we restrict to 120 chars to be extremely safe
+    const match = safeName.match(/^(.*)(\.[a-zA-Z0-9]+)$/);
+    if (match) {
+      let base = match[1];
+      let ext = match[2];
+      if (base.length > 120) base = base.substring(0, 120);
+      safeName = base + ext;
+    } else {
+      if (safeName.length > 120) safeName = safeName.substring(0, 120);
+    }
+
     const blob = new Blob([new Uint8Array(data)], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = filename;
+    link.download = safeName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

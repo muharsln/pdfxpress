@@ -118,9 +118,9 @@ import { PageItem } from '../../core/models/page-item.model';
           <div class="toolbar-actions">
             <!-- Zoom controls -->
             <div class="zoom-ctrl">
-              <button class="zoom-btn" (click)="zoomIn()" [disabled]="zoomLevel() <= 2" title="Küçült">−</button>
+              <button class="zoom-btn" (click)="zoomIn()" [disabled]="zoomLevel() <= 1" title="Küçült">−</button>
               <span class="zoom-val">{{ zoomLevel() }}</span>
-              <button class="zoom-btn" (click)="zoomOut()" [disabled]="zoomLevel() >= 10" title="Büyüt">+</button>
+              <button class="zoom-btn" (click)="zoomOut()" [disabled]="zoomLevel() >= 5" title="Büyüt">+</button>
             </div>
             <button class="btn-ghost danger" (click)="store.clearFile()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
@@ -176,6 +176,7 @@ import { PageItem } from '../../core/models/page-item.model';
                 [selected]="page.selected"
                 [loading]="page.loading"
                 [rotation]="page.rotation"
+                (click)="onCardClick($event, page.id)"
                 (toggleSelect)="store.togglePageSelection(page.id)"
                 (delete)="store.togglePageSelection(page.id); store.deleteSelected()"
               />
@@ -218,22 +219,26 @@ import { PageItem } from '../../core/models/page-item.model';
 })
 export class OrganizerComponent {
   store = inject(OrganizerStore);
-  zoomLevel = signal(4);
+  zoomLevel = signal(3); // 1 = Small (5 pages), 5 = Large (1 page)
 
   gridColumns = computed(() => {
-    const z = this.zoomLevel();
-    const minSize = 560 - (10 - z) * 46.67;
-    return `repeat(auto-fill, minmax(${minSize}px, 1fr))`;
+    // zoomLevel 1 -> 5 columns max
+    // zoomLevel 2 -> 4 columns max
+    // zoomLevel 3 -> 3 columns max
+    // zoomLevel 4 -> 2 columns max
+    // zoomLevel 5 -> 1 column max
+    const cols = 6 - this.zoomLevel();
+    return `repeat(auto-fit, minmax(calc(100% / ${cols} - 16px), 1fr))`;
   });
 
-  thumbnailWidth = computed(() => Math.round(200 + (10 - this.zoomLevel()) * 150));
+  thumbnailWidth = computed(() => 800); // Standard crisp resolution instead of changing constantly
 
   zoomIn() {
-    if (this.zoomLevel() > 2) { this.zoomLevel.update(z => z - 1); this.store.rerenderThumbnails(this.thumbnailWidth()); }
+    if (this.zoomLevel() > 1) { this.zoomLevel.update(z => z - 1); }
   }
 
   zoomOut() {
-    if (this.zoomLevel() < 10) { this.zoomLevel.update(z => z + 1); this.store.rerenderThumbnails(this.thumbnailWidth()); }
+    if (this.zoomLevel() < 5) { this.zoomLevel.update(z => z + 1); }
   }
 
   async onFileSelected(files: File[]) {
@@ -244,5 +249,12 @@ export class OrganizerComponent {
     const pages = [...this.store.pages()];
     moveItemInArray(pages, event.previousIndex, event.currentIndex);
     this.store.reorderPages(pages);
+  }
+
+  onCardClick(event: MouseEvent, pageId: string) {
+    // Allows toggling selection by holding Ctrl/Cmd and clicking anywhere on the card
+    if (event.ctrlKey || event.metaKey) {
+      this.store.togglePageSelection(pageId);
+    }
   }
 }
