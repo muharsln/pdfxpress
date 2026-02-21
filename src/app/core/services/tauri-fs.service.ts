@@ -40,9 +40,9 @@ export class TauriFsService implements ITauriFsService {
   }
 
   async saveFilePicker(options?: SaveDialogOptions): Promise<string | null> {
-    const filename = options?.defaultPath || 'output.pdf';
-    this.downloadFile(new Uint8Array(), filename);
-    return filename;
+    // In web mode, we don't have native save dialogs, so return null
+    // This forces caller stores to fallback to the browser's download prompt.
+    return null;
   }
 
   async openFolderPicker(): Promise<string | null> {
@@ -54,13 +54,6 @@ export class TauriFsService implements ITauriFsService {
   }
 
   downloadFile(data: Uint8Array, filename: string, mimeType: string = 'application/pdf'): void {
-    if (data.length === 0) {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = mimeType === 'application/pdf' ? '.pdf' : '*/*';
-      input.click();
-      return;
-    }
 
     const blob = new Blob([new Uint8Array(data)], { type: mimeType });
     const url = URL.createObjectURL(blob);
