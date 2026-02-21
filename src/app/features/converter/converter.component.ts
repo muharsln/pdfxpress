@@ -217,7 +217,7 @@ import { ConverterStore } from './converter.store';
                 <span class="badge-count">{{ store.imageFiles().length }}</span>
                 görsel seçildi
               </div>
-              <button class="btn-ghost danger" (click)="store.clearImages()">Tümünü sil</button>
+              <button class="btn-ghost danger" (click)="clearImages()">Tümünü sil</button>
             </div>
             <div class="images-grid">
               @for (file of store.imageFiles(); track file.name) {
@@ -260,6 +260,7 @@ import { ConverterStore } from './converter.store';
 })
 export class ConverterComponent {
   store = inject(ConverterStore);
+  previewMap = new Map<File, string>();
 
   async onPdfSelected(files: File[]) {
     if (files[0]) await this.store.setPdfFile(files[0]);
@@ -267,10 +268,21 @@ export class ConverterComponent {
 
   onImagesSelected(files: File[]) {
     const imgs = files.filter(f => f.type.startsWith('image/') || /\.(jpg|jpeg|png|webp|gif|bmp)$/i.test(f.name));
+    imgs.forEach(file => {
+      if (!this.previewMap.has(file)) {
+        this.previewMap.set(file, URL.createObjectURL(file));
+      }
+    });
     this.store.setImageFiles(imgs);
   }
 
+  clearImages() {
+    this.previewMap.forEach(url => URL.revokeObjectURL(url));
+    this.previewMap.clear();
+    this.store.clearImages();
+  }
+
   getPreview(file: File): string {
-    return URL.createObjectURL(file);
+    return this.previewMap.get(file) || '';
   }
 }

@@ -7,7 +7,7 @@ export interface ITauriFsService {
   saveFilePicker(options?: SaveDialogOptions): Promise<string | null>;
   openFolderPicker(): Promise<string | null>;
   writeFile(path: string, data: Uint8Array): Promise<void>;
-  downloadFile(data: Uint8Array, filename: string): void;
+  downloadFile(data: Uint8Array, filename: string, mimeType?: string): void;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -20,8 +20,8 @@ export class TauriFsService implements ITauriFsService {
     return new Promise((resolve) => {
       const input = document.createElement('input');
       input.type = 'file';
-      input.accept = options?.filters?.[0]?.extensions?.[0] 
-        ? `.${options.filters[0].extensions[0]}` 
+      input.accept = options?.filters?.[0]?.extensions?.[0]
+        ? `.${options.filters[0].extensions[0]}`
         : '.pdf';
       input.multiple = options?.multiple ?? true;
 
@@ -53,16 +53,16 @@ export class TauriFsService implements ITauriFsService {
     console.log('Writing file to:', path, 'Size:', data.length);
   }
 
-  downloadFile(data: Uint8Array, filename: string): void {
+  downloadFile(data: Uint8Array, filename: string, mimeType: string = 'application/pdf'): void {
     if (data.length === 0) {
       const input = document.createElement('input');
       input.type = 'file';
-      input.accept = '.pdf';
+      input.accept = mimeType === 'application/pdf' ? '.pdf' : '*/*';
       input.click();
       return;
     }
-    
-    const blob = new Blob([new Uint8Array(data)], { type: 'application/pdf' });
+
+    const blob = new Blob([new Uint8Array(data)], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
