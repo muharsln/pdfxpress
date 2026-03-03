@@ -491,16 +491,23 @@ export class SplitterComponent {
     for (const part of input.split(',').map((s) => s.trim())) {
       if (part.includes('-')) {
         const [startStr, endStr] = part.split('-').map((s) => s.trim());
-        const start = parseInt(startStr, 10);
+        const start = Number.parseInt(startStr, 10);
         const end =
           endStr.toLowerCase() === 'son' || endStr.toLowerCase() === 'end'
             ? maxPages
-            : parseInt(endStr, 10);
-        if (!isNaN(start) && !isNaN(end) && start > 0 && end <= maxPages && start <= end)
+            : Number.parseInt(endStr, 10);
+        if (
+          !Number.isNaN(start) &&
+          !Number.isNaN(end) &&
+          start > 0 &&
+          end <= maxPages &&
+          start <= end
+        )
           ranges.push({ start, end });
       } else {
-        const page = parseInt(part, 10);
-        if (!isNaN(page) && page > 0 && page <= maxPages) ranges.push({ start: page, end: page });
+        const page = Number.parseInt(part, 10);
+        if (!Number.isNaN(page) && page > 0 && page <= maxPages)
+          ranges.push({ start: page, end: page });
       }
     }
     return ranges.sort((a, b) => a.start - b.start);

@@ -122,11 +122,12 @@ export const ConverterStore = signalStore(
             );
 
             const base64Data = dataUrl.split(',')[1];
-            const binaryString = window.atob(base64Data);
+            const binaryString = globalThis.atob(base64Data);
             const len = binaryString.length;
             const bytes = new Uint8Array(len);
             for (let j = 0; j < len; j++) {
-              bytes[j] = binaryString.charCodeAt(j);
+              const codePoint = binaryString.codePointAt(j);
+              bytes[j] = codePoint ?? 0;
             }
 
             fsService.downloadFile(
@@ -215,11 +216,12 @@ export const ConverterStore = signalStore(
             // Get standard JPEG buffer
             const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
             const base64Data = dataUrl.split(',')[1];
-            const binaryString = window.atob(base64Data);
+            const binaryString = globalThis.atob(base64Data);
             const len = binaryString.length;
             const bytes = new Uint8Array(len);
             for (let j = 0; j < len; j++) {
-              bytes[j] = binaryString.charCodeAt(j);
+              const codePoint = binaryString.codePointAt(j);
+              bytes[j] = codePoint ?? 0;
             }
 
             const image = await pdfDoc.embedJpg(bytes);
@@ -267,18 +269,24 @@ function parseRangeString(input: string, maxPages: number): PageRange[] {
   for (const part of parts) {
     if (part.includes('-')) {
       const [startStr, endStr] = part.split('-').map((s) => s.trim());
-      const start = parseInt(startStr, 10);
+      const start = Number.parseInt(startStr, 10);
       const end =
         endStr.toLowerCase() === 'son' || endStr.toLowerCase() === 'end'
           ? maxPages
-          : parseInt(endStr, 10);
+          : Number.parseInt(endStr, 10);
 
-      if (!isNaN(start) && !isNaN(end) && start > 0 && end <= maxPages && start <= end) {
+      if (
+        !Number.isNaN(start) &&
+        !Number.isNaN(end) &&
+        start > 0 &&
+        end <= maxPages &&
+        start <= end
+      ) {
         ranges.push({ start, end });
       }
     } else {
-      const page = parseInt(part, 10);
-      if (!isNaN(page) && page > 0 && page <= maxPages) {
+      const page = Number.parseInt(part, 10);
+      if (!Number.isNaN(page) && page > 0 && page <= maxPages) {
         ranges.push({ start: page, end: page });
       }
     }

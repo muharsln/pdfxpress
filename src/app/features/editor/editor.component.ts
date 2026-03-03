@@ -510,8 +510,8 @@ export class EditorComponent {
     this.editingId = item.id;
     // Tiny delay to auto-focus the input once created
     setTimeout(() => {
-      const inputs = document.querySelectorAll('.text-input') as NodeListOf<HTMLInputElement>;
-      if (inputs.length > 0) inputs[0].focus();
+      const inputs = document.querySelectorAll('.text-input');
+      if (inputs.length > 0) (inputs[0] as HTMLElement).focus();
     }, 10);
   }
 

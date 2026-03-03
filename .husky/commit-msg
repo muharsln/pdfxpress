@@ -1,1 +1,22 @@
-npx --no -- commitlint --edit ${1}
+# Commitlint'i çalıştır, hata varsa sade metin mesajını göster
+npx --no -- commitlint --edit "$1" || {
+  echo ""
+  echo "----------------------------------------------------------"
+  echo " HATA: Commit mesajı standartlara (Conventional Commits) uymuyor!"
+  echo "----------------------------------------------------------"
+  echo ""
+  echo " DOĞRU FORMAT:"
+  echo " <tip>(<kapsam>): <açıklama>"
+  echo ""
+  echo " GEÇERLİ TİPLER:"
+  echo " feat, fix, chore, docs, refactor, test, style, perf, ci, build"
+  echo ""
+  echo " ÖRNEKLER:"
+  echo " feat(auth): kullanıcı girişi eklendi"
+  echo " fix(pdf): sayfa numaralandırma hatası düzeltildi"
+  echo " chore: paket güncellemeleri yapıldı"
+  echo ""
+  echo " Daha fazla bilgi için: https://conventionalcommits.org"
+  echo "----------------------------------------------------------"
+  exit 1
+}

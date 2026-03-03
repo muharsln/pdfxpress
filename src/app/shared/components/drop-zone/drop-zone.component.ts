@@ -202,7 +202,7 @@ export class DropZoneComponent {
       if (f.type.toLowerCase().includes('pdf')) return true;
 
       // Safe Regex fallback for extensions, overcoming Turkish locale 'I/i' lowercasing bugs
-      const match = f.name.match(/\.([a-zA-Z0-9]+)$/i);
+      const match = f.name.match(/\.([a-z0-9]+)$/i);
       if (!match) return false;
 
       const ext = `.${match[1].toLowerCase()}`;
