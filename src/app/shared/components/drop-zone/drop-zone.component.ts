@@ -7,35 +7,73 @@ import { Component, input, output, signal } from '@angular/core';
   template: `
     @if (!compact()) {
       <!-- Full drop zone -->
-      <div class="dropzone" [class.over]="over()"
-           (dragover)="onOver($event)" (dragleave)="onLeave($event)" (drop)="onDrop($event)"
-           (click)="input.click()"
-           style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;min-height:360px;text-align:center;">
-        <input #input type="file" [accept]="accept()" [multiple]="multiple()" (change)="onSelect($event)" hidden>
+      <div
+        class="dropzone"
+        [class.over]="over()"
+        (dragover)="onOver($event)"
+        (dragleave)="onLeave($event)"
+        (drop)="onDrop($event)"
+        (click)="input.click()"
+        (keydown.enter)="input.click()"
+        tabindex="0"
+        role="button"
+        aria-label="Dosya Seç"
+        style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;min-height:360px;text-align:center;"
+      >
+        <input
+          #input
+          type="file"
+          [accept]="accept()"
+          [multiple]="multiple()"
+          (change)="onSelect($event)"
+          hidden
+        />
 
         <!-- Icon with animation -->
         <div style="position:relative;">
           <!-- Ping ring on hover/over -->
           @if (over()) {
-            <div class="animate-ping" style="position:absolute;inset:-12px;border-radius:50%;border:1.5px solid var(--accent);opacity:.5;"></div>
+            <div
+              class="animate-ping"
+              style="position:absolute;inset:-12px;border-radius:50%;border:1.5px solid var(--accent);opacity:.5;"
+            ></div>
           }
-          <div style="width:88px;height:88px;border-radius:24px;display:flex;align-items:center;justify-content:center;transition:all .25s var(--ease);"
-               [style.background]="over() ? 'var(--accent)' : 'var(--surface-2)'"
-               [style.color]="over() ? '#fff' : 'var(--text-3)'">
+          <div
+            style="width:88px;height:88px;border-radius:24px;display:flex;align-items:center;justify-content:center;transition:all .25s var(--ease);"
+            [style.background]="over() ? 'var(--accent)' : 'var(--surface-2)'"
+            [style.color]="over() ? '#fff' : 'var(--text-3)'"
+          >
             @if (over()) {
               <!-- Arrow down on drag over -->
-              <svg class="animate-slide-up" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <polyline points="19,12 12,19 5,12"/>
+              <svg
+                class="animate-slide-up"
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <polyline points="19,12 12,19 5,12" />
               </svg>
             } @else {
               <!-- PDF + upload icon when idle (floats) -->
               <div class="animate-float">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z"/>
-                  <path d="M14 2v6h6"/>
-                  <line x1="12" y1="18" x2="12" y2="12"/>
-                  <polyline points="9,15 12,12 15,15"/>
+                <svg
+                  width="40"
+                  height="40"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                >
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <path d="M14 2v6h6" />
+                  <line x1="12" y1="18" x2="12" y2="12" />
+                  <polyline points="9,15 12,12 15,15" />
                 </svg>
               </div>
             }
@@ -45,7 +83,7 @@ import { Component, input, output, signal } from '@angular/core';
         <!-- Text -->
         <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
           <p style="font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.02em;">
-            {{ over() ? 'Dosyaları Bırakın' : (title() || 'PDF Dosyası Sürükleyin') }}
+            {{ over() ? 'Dosyaları Bırakın' : title() || 'PDF Dosyası Sürükleyin' }}
           </p>
           <p style="font-size:13px;color:var(--text-3);">
             {{ over() ? '' : 'veya tıklayarak dosya seçin' }}
@@ -67,20 +105,49 @@ import { Component, input, output, signal } from '@angular/core';
 
     @if (compact()) {
       <!-- Compact add-more zone -->
-      <div class="dropzone" [class.over]="over()"
-           (dragover)="onOver($event)" (dragleave)="onLeave($event)" (drop)="onDrop($event)"
-           (click)="input.click()"
-           style="display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;border-radius:10px;">
-        <input #input type="file" [accept]="accept()" [multiple]="multiple()" (change)="onSelect($event)" hidden>
-        <div style="width:28px;height:28px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--text-3);">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      <div
+        class="dropzone"
+        [class.over]="over()"
+        (dragover)="onOver($event)"
+        (dragleave)="onLeave($event)"
+        (drop)="onDrop($event)"
+        (click)="input.click()"
+        (keydown.enter)="input.click()"
+        tabindex="0"
+        role="button"
+        aria-label="Dosya Ekle"
+        style="display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;border-radius:10px;"
+      >
+        <input
+          #input
+          type="file"
+          [accept]="accept()"
+          [multiple]="multiple()"
+          (change)="onSelect($event)"
+          hidden
+        />
+        <div
+          style="width:28px;height:28px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--text-3);"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          >
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
           </svg>
         </div>
-        <span style="font-size:13px;font-weight:600;color:var(--text-3);">{{ title() || 'Dosya ekle' }}</span>
+        <span style="font-size:13px;font-weight:600;color:var(--text-3);">{{
+          title() || 'Dosya ekle'
+        }}</span>
       </div>
     }
-  `
+  `,
 })
 export class DropZoneComponent {
   files = output<File[]>();
@@ -92,12 +159,14 @@ export class DropZoneComponent {
   over = signal(false);
 
   onOver(e: DragEvent) {
-    e.preventDefault(); e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
     this.over.set(true);
   }
 
   onLeave(e: DragEvent) {
-    e.preventDefault(); e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
     const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
     if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) {
       this.over.set(false);
@@ -105,7 +174,8 @@ export class DropZoneComponent {
   }
 
   onDrop(e: DragEvent) {
-    e.preventDefault(); e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
     this.over.set(false);
     const files = e.dataTransfer?.files;
     if (files?.length) this.files.emit(this.filter(Array.from(files)));
@@ -113,7 +183,10 @@ export class DropZoneComponent {
 
   onSelect(e: Event) {
     const el = e.target as HTMLInputElement;
-    if (el.files?.length) { this.files.emit(this.filter(Array.from(el.files))); el.value = ''; }
+    if (el.files?.length) {
+      this.files.emit(this.filter(Array.from(el.files)));
+      el.value = '';
+    }
   }
 
   private filter(files: File[]) {
@@ -121,9 +194,9 @@ export class DropZoneComponent {
     if (!a || a === '*') return files;
 
     // Convert accept inputs like '.pdf' to a safe array
-    const exts = a.split(',').map(s => s.trim().toLowerCase());
+    const exts = a.split(',').map((s) => s.trim().toLowerCase());
 
-    return files.filter(f => {
+    return files.filter((f) => {
       // Check MIME type natively (best for cross-platform/long-names)
       if (f.type.toLowerCase() === 'application/pdf') return true;
       if (f.type.toLowerCase().includes('pdf')) return true;
@@ -133,7 +206,7 @@ export class DropZoneComponent {
       if (!match) return false;
 
       const ext = `.${match[1].toLowerCase()}`;
-      return exts.some(e => e.includes(ext) || ext.includes(e));
+      return exts.some((e) => e.includes(ext) || ext.includes(e));
     });
   }
 }

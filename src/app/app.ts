@@ -6,6 +6,6 @@ import { ShellComponent } from './layout/shell.component';
   standalone: true,
   imports: [ShellComponent],
   host: { style: 'display: block; height: 100%; width: 100%;' },
-  template: '<app-shell></app-shell>'
+  template: '<app-shell></app-shell>',
 })
-export class App { }
+export class App {}

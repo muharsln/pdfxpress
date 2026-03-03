@@ -38,9 +38,9 @@ export interface ToastMessage {
 
 export interface OpenDialogOptions {
   title?: string;
-  filters?: Array<{
+  filters?: {
     name: string;
     extensions: string[];
-  }>;
+  }[];
   multiple?: boolean;
 }

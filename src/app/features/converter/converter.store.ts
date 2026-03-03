@@ -56,12 +56,12 @@ export const ConverterStore = signalStore(
             pdfFile: file,
             pdfPageCount: pageCount,
             pdfRangeInput: pageCount > 1 ? `1-${pageCount}` : '1',
-            isProcessing: false
+            isProcessing: false,
           });
-        } catch (error: any) {
+        } catch (error: unknown) {
           patchState(store, {
             isProcessing: false,
-            error: error.message || 'PDF yüklenemedi'
+            error: (error as Error).message || 'PDF yüklenemedi',
           });
         }
       },
@@ -113,7 +113,13 @@ export const ConverterStore = signalStore(
           if (total === 1) {
             const pageNum = pagesToRender[0];
             const renderWidth = Math.max(300, Math.round((quality / 100) * 3000));
-            const dataUrl = await renderService.renderPage(file, pageNum, renderWidth, format, quality / 100);
+            const dataUrl = await renderService.renderPage(
+              file,
+              pageNum,
+              renderWidth,
+              format,
+              quality / 100,
+            );
 
             const base64Data = dataUrl.split(',')[1];
             const binaryString = window.atob(base64Data);
@@ -126,7 +132,7 @@ export const ConverterStore = signalStore(
             fsService.downloadFile(
               bytes,
               `${file.name.replace('.pdf', '')}_page_${pageNum}.${format}`,
-              `image/${format}`
+              `image/${format}`,
             );
           } else {
             const JSZip = (await import('jszip')).default;
@@ -135,7 +141,13 @@ export const ConverterStore = signalStore(
             for (let i = 0; i < total; i++) {
               const pageNum = pagesToRender[i];
               const renderWidth = Math.max(300, Math.round((quality / 100) * 3000));
-              const dataUrl = await renderService.renderPage(file, pageNum, renderWidth, format, quality / 100);
+              const dataUrl = await renderService.renderPage(
+                file,
+                pageNum,
+                renderWidth,
+                format,
+                quality / 100,
+              );
 
               const base64Data = dataUrl.split(',')[1];
               zip.file(`page_${pageNum}.${format}`, base64Data, { base64: true });
@@ -143,25 +155,28 @@ export const ConverterStore = signalStore(
               patchState(store, { progress: Math.round(((i + 1) / total) * 90) });
             }
 
-            const zipBytes = await zip.generateAsync({
-              type: 'uint8array',
-              compression: 'STORE'
-            }, (metadata) => {
-              patchState(store, { progress: 90 + Math.round(metadata.percent * 0.1) });
-            });
+            const zipBytes = await zip.generateAsync(
+              {
+                type: 'uint8array',
+                compression: 'STORE',
+              },
+              (metadata) => {
+                patchState(store, { progress: 90 + Math.round(metadata.percent * 0.1) });
+              },
+            );
 
             fsService.downloadFile(
               zipBytes,
               `${file.name.replace('.pdf', '')}_images.zip`,
-              'application/zip'
+              'application/zip',
             );
           }
 
           patchState(store, { isProcessing: false, progress: 100 });
-        } catch (error: any) {
+        } catch (error: unknown) {
           patchState(store, {
             isProcessing: false,
-            error: error.message || 'Dönüştürme başarısız'
+            error: (error as Error).message || 'Dönüştürme başarısız',
           });
         }
       },
@@ -225,11 +240,11 @@ export const ConverterStore = signalStore(
           fsService.downloadFile(new Uint8Array(pdfBytes), 'converted.pdf');
 
           patchState(store, { isProcessing: false, progress: 100 });
-        } catch (error: any) {
-          console.error("Image to PDF conversion failed:", error);
+        } catch (error: unknown) {
+          console.error('Image to PDF conversion failed:', error);
           patchState(store, {
             isProcessing: false,
-            error: error.message || 'PDF oluşturulamadı'
+            error: (error as Error).message || 'PDF oluşturulamadı',
           });
         }
       },
@@ -242,18 +257,21 @@ export const ConverterStore = signalStore(
         patchState(store, { error: null });
       },
     };
-  })
+  }),
 );
 
 function parseRangeString(input: string, maxPages: number): PageRange[] {
   const ranges: PageRange[] = [];
-  const parts = input.split(',').map(s => s.trim());
+  const parts = input.split(',').map((s) => s.trim());
 
   for (const part of parts) {
     if (part.includes('-')) {
-      const [startStr, endStr] = part.split('-').map(s => s.trim());
+      const [startStr, endStr] = part.split('-').map((s) => s.trim());
       const start = parseInt(startStr, 10);
-      const end = endStr.toLowerCase() === 'son' || endStr.toLowerCase() === 'end' ? maxPages : parseInt(endStr, 10);
+      const end =
+        endStr.toLowerCase() === 'son' || endStr.toLowerCase() === 'end'
+          ? maxPages
+          : parseInt(endStr, 10);
 
       if (!isNaN(start) && !isNaN(end) && start > 0 && end <= maxPages && start <= end) {
         ranges.push({ start, end });

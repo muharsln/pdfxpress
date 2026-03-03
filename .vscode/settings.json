@@ -7,5 +7,20 @@
     // If you have the official Tailwind CSS IntelliSense extension,
     // this tells it where your entry CSS file is so it provides
     // auto-complete for @theme tokens, class names, etc.
-    "tailwindCSS.experimental.configFile": "./src/styles.css"
+    "tailwindCSS.experimental.configFile": "./src/styles.css",
+    "eslint.lintTask.enable": true,
+    "eslint.codeActionsOnSave.rules": [
+        "source.fixAll.eslint"
+    ],
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[scss]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
 }

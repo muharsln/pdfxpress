@@ -1,5 +1,5 @@
 import { signalStore, withState, withComputed, withMethods, patchState } from '@ngrx/signals';
-import { inject } from '@angular/core';
+import { computed, inject } from '@angular/core';
 import { PdfFile } from '../../core/models/pdf-file.model';
 import { PageItem, createPageItem } from '../../core/models/page-item.model';
 import { PdfLibService } from '../../core/services/pdf-lib.service';
@@ -26,8 +26,8 @@ export const OrganizerStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withComputed((store) => ({
-    selectedCount: () => store.pages().filter(p => p.selected).length,
-    selectedPages: () => store.pages().filter(p => p.selected),
+    selectedCount: computed(() => store.pages().filter((p) => p.selected).length),
+    selectedPages: computed(() => store.pages().filter((p) => p.selected)),
   })),
   withMethods((store) => {
     const pdfService = inject(PdfLibService);
@@ -52,56 +52,58 @@ export const OrganizerStore = signalStore(
           const pages = Array.from({ length: pageCount }, (_, i) => createPageItem(i));
           patchState(store, { file: pdfFile, pages, isProcessing: false });
 
-          renderService.renderAllPages(file, width, 'jpeg', 0.8, (current, total) => {
-            patchState(store, { progress: Math.round((current / total) * 100) });
-          }).then((thumbnails) => {
-            const updatedPages = store.pages().map(p => ({
-              ...p,
-              thumbnailUrl: thumbnails.get(p.pageNumber) || null,
-              loading: false,
-            }));
-            patchState(store, { pages: updatedPages });
-          });
-        } catch (error: any) {
+          renderService
+            .renderAllPages(file, width, 'jpeg', 0.8, (current, total) => {
+              patchState(store, { progress: Math.round((current / total) * 100) });
+            })
+            .then((thumbnails) => {
+              const updatedPages = store.pages().map((p) => ({
+                ...p,
+                thumbnailUrl: thumbnails.get(p.pageNumber) || null,
+                loading: false,
+              }));
+              patchState(store, { pages: updatedPages });
+            });
+        } catch (error: unknown) {
           patchState(store, {
             isProcessing: false,
-            error: error.message || 'Failed to load PDF'
+            error: (error as Error).message || 'Failed to load PDF',
           });
         }
       },
 
-
-
       clearFile: () => {
-        const urls = store.pages()
-          .map(p => p.thumbnailUrl)
+        const urls = store
+          .pages()
+          .map((p) => p.thumbnailUrl)
           .filter((u): u is string => u !== null);
         renderService.revokeUrls(urls);
         patchState(store, { file: null, pages: [] });
       },
 
       togglePageSelection: (pageId: string) => {
-        const pages = store.pages().map(p =>
-          p.id === pageId ? { ...p, selected: !p.selected } : p
-        );
+        const pages = store
+          .pages()
+          .map((p) => (p.id === pageId ? { ...p, selected: !p.selected } : p));
         patchState(store, { pages });
       },
 
       selectAll: () => {
-        const pages = store.pages().map(p => ({ ...p, selected: true }));
+        const pages = store.pages().map((p) => ({ ...p, selected: true }));
         patchState(store, { pages });
       },
 
       deselectAll: () => {
-        const pages = store.pages().map(p => ({ ...p, selected: false }));
+        const pages = store.pages().map((p) => ({ ...p, selected: false }));
         patchState(store, { pages });
       },
 
       deleteSelected: () => {
-        const pages = store.pages().filter(p => !p.selected);
-        const deletedUrls = store.pages()
-          .filter(p => p.selected)
-          .map(p => p.thumbnailUrl)
+        const pages = store.pages().filter((p) => !p.selected);
+        const deletedUrls = store
+          .pages()
+          .filter((p) => p.selected)
+          .map((p) => p.thumbnailUrl)
           .filter((u): u is string => u !== null);
 
         renderService.revokeUrls(deletedUrls);
@@ -115,7 +117,7 @@ export const OrganizerStore = signalStore(
       },
 
       rotateSelected: (degrees: 90 | -90) => {
-        const pages = store.pages().map(p => {
+        const pages = store.pages().map((p) => {
           if (p.selected) {
             let newRotation = (p.rotation + degrees) % 360;
             if (newRotation < 0) newRotation += 360;
@@ -141,9 +143,9 @@ export const OrganizerStore = signalStore(
         patchState(store, { isProcessing: true, progress: 0, error: null });
 
         try {
-          const pageOrder = store.pages().map(p => p.originalIndex);
+          const pageOrder = store.pages().map((p) => p.originalIndex);
           const rotations = new Map<number, number>();
-          store.pages().forEach(p => {
+          store.pages().forEach((p) => {
             if (p.rotation !== 0) {
               rotations.set(p.originalIndex, p.rotation);
             }
@@ -154,10 +156,10 @@ export const OrganizerStore = signalStore(
           fsService.downloadFile(data, `${file.name}_organized.pdf`);
 
           patchState(store, { isProcessing: false, progress: 100 });
-        } catch (error: any) {
+        } catch (error: unknown) {
           patchState(store, {
             isProcessing: false,
-            error: error.message || 'Failed to save PDF'
+            error: (error as Error).message || 'Failed to save PDF',
           });
         }
       },
@@ -171,5 +173,5 @@ export const OrganizerStore = signalStore(
         patchState(store, { error: null });
       },
     };
-  })
+  }),
 );

@@ -48,7 +48,7 @@ export const MergerStore = signalStore(
 
       removeFile: (id: string) => {
         patchState(store, {
-          files: store.files().filter(f => f.id !== id)
+          files: store.files().filter((f) => f.id !== id),
         });
       },
 
@@ -69,7 +69,7 @@ export const MergerStore = signalStore(
         patchState(store, { isProcessing: true, progress: 0, error: null });
 
         try {
-          const files = store.files().map(f => f.file);
+          const files = store.files().map((f) => f.file);
           const merged = await pdfService.mergePdfs(files, (progress) => {
             patchState(store, { progress });
           });
@@ -77,10 +77,10 @@ export const MergerStore = signalStore(
           fsService.downloadFile(merged, 'merged.pdf');
 
           patchState(store, { isProcessing: false, progress: 100 });
-        } catch (error: any) {
+        } catch (error: unknown) {
           patchState(store, {
             isProcessing: false,
-            error: error.message || 'Failed to merge PDFs'
+            error: (error as Error).message || 'Failed to merge PDFs',
           });
         }
       },
@@ -93,5 +93,5 @@ export const MergerStore = signalStore(
         patchState(store, { error: null });
       },
     };
-  })
+  }),
 );

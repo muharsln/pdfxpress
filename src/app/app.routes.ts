@@ -4,26 +4,35 @@ export const routes: Routes = [
   {
     path: '',
     redirectTo: 'merge',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'merge',
-    loadComponent: () => import('./features/merger/merger.component').then(m => m.MergerComponent)
+    loadComponent: () =>
+      import('./features/merger/merger.component').then((m) => m.MergerComponent),
   },
   {
     path: 'split',
-    loadComponent: () => import('./features/splitter/splitter.component').then(m => m.SplitterComponent)
+    loadComponent: () =>
+      import('./features/splitter/splitter.component').then((m) => m.SplitterComponent),
   },
   {
     path: 'organize',
-    loadComponent: () => import('./features/organizer/organizer.component').then(m => m.OrganizerComponent)
+    loadComponent: () =>
+      import('./features/organizer/organizer.component').then((m) => m.OrganizerComponent),
   },
   {
     path: 'convert',
-    loadComponent: () => import('./features/converter/converter.component').then(m => m.ConverterComponent)
+    loadComponent: () =>
+      import('./features/converter/converter.component').then((m) => m.ConverterComponent),
+  },
+  {
+    path: 'edit',
+    loadComponent: () =>
+      import('./features/editor/editor.component').then((m) => m.EditorComponent),
   },
   {
     path: '**',
-    redirectTo: 'merge'
-  }
+    redirectTo: 'merge',
+  },
 ];

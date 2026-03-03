@@ -1,5 +1,5 @@
-import { signalStore, withState, withComputed, withMethods, patchState } from '@ngrx/signals';
-import { computed, inject } from '@angular/core';
+import { signalStore, withState, withMethods, patchState } from '@ngrx/signals';
+import { inject } from '@angular/core';
 import { PdfFile } from '../../core/models/pdf-file.model';
 import { PageRange } from '../../core/models/worker-types';
 import { PdfLibService } from '../../core/services/pdf-lib.service';
@@ -101,11 +101,7 @@ export const SplitterStore = signalStore(
             throw new Error('No valid page ranges specified');
           }
 
-          const results = await pdfService.splitPdf(
-            file.file,
-            ranges,
-            store.filenamePrefix()
-          );
+          const results = await pdfService.splitPdf(file.file, ranges, store.filenamePrefix());
 
           results.forEach((r, i) => {
             fsService.downloadFile(r.data, r.filename);
@@ -113,10 +109,10 @@ export const SplitterStore = signalStore(
           });
 
           patchState(store, { isProcessing: false, progress: 100 });
-        } catch (error: any) {
+        } catch (error: unknown) {
           patchState(store, {
             isProcessing: false,
-            error: error.message || 'Failed to split PDF'
+            error: (error as Error).message || 'Failed to split PDF',
           });
         }
       },
@@ -129,16 +125,16 @@ export const SplitterStore = signalStore(
         patchState(store, { error: null });
       },
     };
-  })
+  }),
 );
 
 function parseRangeString(input: string, maxPages: number): PageRange[] {
   const ranges: PageRange[] = [];
-  const parts = input.split(',').map(s => s.trim());
+  const parts = input.split(',').map((s) => s.trim());
 
   for (const part of parts) {
     if (part.includes('-')) {
-      const [startStr, endStr] = part.split('-').map(s => s.trim());
+      const [startStr, endStr] = part.split('-').map((s) => s.trim());
       const start = parseInt(startStr, 10);
       const end = endStr.toLowerCase() === 'end' ? maxPages : parseInt(endStr, 10);
 

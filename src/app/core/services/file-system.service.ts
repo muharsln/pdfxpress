@@ -20,7 +20,7 @@ export class FileSystemService implements IFileSystemService {
       input.onchange = () => {
         if (input.files && input.files.length > 0) {
           const files = Array.from(input.files);
-          resolve(files.map(f => f.name));
+          resolve(files.map((f) => f.name));
         } else {
           resolve(null);
         }
@@ -31,19 +31,20 @@ export class FileSystemService implements IFileSystemService {
     });
   }
 
-  downloadFile(data: Uint8Array, filename: string, mimeType: string = 'application/pdf'): void {
+  downloadFile(data: Uint8Array, filename: string, mimeType = 'application/pdf'): void {
     // Sanitize filename to prevent OS silent download failures for long/invalid names
-    let safeName = filename.replace(/[<>:"\/\\|?*\x00-\x1F]/g, '_');
+    // eslint-disable-next-line no-control-regex
+    let safeName = filename.replaceAll(/[<>:"/\\|*?\x00-\x1F]/g, '_');
 
     // Windows path limit max safe boundary is ~255, we restrict to 120 chars to be extremely safe
     const match = safeName.match(/^(.*)(\.[a-zA-Z0-9]+)$/);
     if (match) {
       let base = match[1];
-      let ext = match[2];
+      const ext = match[2];
       if (base.length > 120) base = base.substring(0, 120);
       safeName = base + ext;
-    } else {
-      if (safeName.length > 120) safeName = safeName.substring(0, 120);
+    } else if (safeName.length > 120) {
+      safeName = safeName.substring(0, 120);
     }
 
     const blob = new Blob([new Uint8Array(data)], { type: mimeType });
@@ -53,7 +54,7 @@ export class FileSystemService implements IFileSystemService {
     link.download = safeName;
     document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
+    link.remove();
     URL.revokeObjectURL(url);
   }
 }
