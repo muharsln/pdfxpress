@@ -106,7 +106,7 @@ import { CommonModule } from '@angular/common';
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 8px 10px;
+        padding: var(--s-sm) 10px;
         background: var(--surface-2);
         border-bottom: 1px solid var(--border);
         transition: background 0.2s;
@@ -131,7 +131,7 @@ import { CommonModule } from '@angular/common';
       .checkmark {
         width: 20px;
         height: 20px;
-        border-radius: 6px;
+        border-radius: var(--r-sm);
         border: 2px solid var(--border-2);
         background: var(--surface);
         display: flex;
@@ -169,7 +169,7 @@ import { CommonModule } from '@angular/common';
       }
 
       .page-num {
-        font-size: 13px;
+        font-size: var(--fs-sm);
         font-weight: 700;
         color: var(--text-2);
         transition: color 0.2s;
@@ -181,7 +181,7 @@ import { CommonModule } from '@angular/common';
       .delete-btn {
         width: 24px;
         height: 24px;
-        border-radius: 6px;
+        border-radius: var(--r-sm);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -233,14 +233,14 @@ import { CommonModule } from '@angular/common';
 
       .rotation-badge {
         position: absolute;
-        bottom: 8px;
-        right: 8px;
+        bottom: var(--s-sm);
+        right: var(--s-sm);
         padding: 2px 6px;
         background: rgba(0, 0, 0, 0.6);
         color: #fff;
-        font-size: 11px;
+        font-size: var(--fs-xs);
         font-weight: 700;
-        border-radius: 4px;
+        border-radius: var(--r-xs);
         backdrop-filter: blur(4px);
       }
 

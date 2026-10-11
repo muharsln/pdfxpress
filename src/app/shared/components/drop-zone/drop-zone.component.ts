@@ -18,7 +18,7 @@ import { Component, input, output, signal } from '@angular/core';
         tabindex="0"
         role="button"
         aria-label="Dosya Seç"
-        style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;min-height:360px;text-align:center;"
+        style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--s-lg);min-height:360px;text-align:center;"
       >
         <input
           #input
@@ -39,7 +39,7 @@ import { Component, input, output, signal } from '@angular/core';
             ></div>
           }
           <div
-            style="width:88px;height:88px;border-radius:24px;display:flex;align-items:center;justify-content:center;transition:all .25s var(--ease);"
+            style="width:88px;height:88px;border-radius:var(--r-xxl);display:flex;align-items:center;justify-content:center;transition:all .25s var(--ease);"
             [style.background]="over() ? 'var(--accent)' : 'var(--surface-2)'"
             [style.color]="over() ? '#fff' : 'var(--text-3)'"
           >
@@ -81,22 +81,22 @@ import { Component, input, output, signal } from '@angular/core';
         </div>
 
         <!-- Text -->
-        <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
+        <div style="display:flex;flex-direction:column;gap:var(--s-xs);align-items:center;">
           <p style="font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.02em;">
             {{ over() ? 'Dosyaları Bırakın' : title() || 'PDF Dosyası Sürükleyin' }}
           </p>
-          <p style="font-size:13px;color:var(--text-3);">
+          <p style="font-size:var(--fs-sm);color:var(--text-3);">
             {{ over() ? '' : 'veya tıklayarak dosya seçin' }}
           </p>
         </div>
 
         <!-- Constraint pills -->
         @if (!over()) {
-          <div style="display:flex;align-items:center;gap:8px;">
+          <div style="display:flex;align-items:center;gap:var(--s-sm);">
             <span class="pill">PDF</span>
-            <span style="color:var(--text-4);font-size:12px;">·</span>
+            <span style="color:var(--text-4);font-size:var(--fs-sm);">·</span>
             <span class="pill">Maks 100 MB</span>
-            <span style="color:var(--text-4);font-size:12px;">·</span>
+            <span style="color:var(--text-4);font-size:var(--fs-sm);">·</span>
             <span class="pill">Çoklu dosya</span>
           </div>
         }
@@ -116,7 +116,7 @@ import { Component, input, output, signal } from '@angular/core';
         tabindex="0"
         role="button"
         aria-label="Dosya Ekle"
-        style="display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;border-radius:10px;"
+        style="display:flex;align-items:center;justify-content:center;gap:var(--s-sm);min-height:56px;border-radius:var(--r-md);"
       >
         <input
           #input
@@ -127,7 +127,7 @@ import { Component, input, output, signal } from '@angular/core';
           hidden
         />
         <div
-          style="width:28px;height:28px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--text-3);"
+          style="width:28px;height:28px;border-radius:var(--r-sm);background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--text-3);"
         >
           <svg
             width="14"
@@ -142,7 +142,7 @@ import { Component, input, output, signal } from '@angular/core';
             <line x1="5" y1="12" x2="19" y2="12" />
           </svg>
         </div>
-        <span style="font-size:13px;font-weight:600;color:var(--text-3);">{{
+        <span style="font-size:var(--fs-sm);font-weight:600;color:var(--text-3);">{{
           title() || 'Dosya ekle'
         }}</span>
       </div>

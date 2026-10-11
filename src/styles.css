@@ -79,7 +79,7 @@ html,
 body {
   height: 100%;
   font-family: var(--font);
-  font-size: 15px;
+  font-size: var(--fs-lg);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   background: var(--bg);
@@ -122,7 +122,7 @@ a {
 
 ::-webkit-scrollbar-thumb {
   background: var(--border-2);
-  border-radius: 99px;
+  border-radius: var(--r-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -133,7 +133,7 @@ a {
 .dropzone {
   border: 1.5px dashed var(--border-2);
   background: var(--surface);
-  border-radius: var(--radius-xl);
+  border-radius: var(--r-xl);
   transition:
     border-color 0.2s var(--ease),
     background 0.2s var(--ease),
@@ -159,7 +159,7 @@ a {
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--r-lg);
   box-shadow: var(--shadow-sm);
 }
 
@@ -169,8 +169,8 @@ a {
   align-items: center;
   padding: 0 10px;
   height: 22px;
-  border-radius: 99px;
-  font-size: 11px;
+  border-radius: var(--r-full);
+  font-size: var(--fs-xs);
   font-weight: 600;
   border: 1px solid var(--border);
   color: var(--text-2);
@@ -181,13 +181,13 @@ a {
 .btn-accent {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--s-sm);
   height: 44px;
   padding: 0 28px;
-  border-radius: var(--radius-md);
+  border-radius: var(--r-md);
   background: var(--accent);
   color: #fff;
-  font-size: 14px;
+  font-size: var(--fs-base);
   font-weight: 700;
   transition:
     background 0.15s,
@@ -218,7 +218,7 @@ a {
   gap: 6px;
   height: 32px;
   padding: 0 12px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--r-xs);
   font-size: 12px;
   font-weight: 600;
   color: var(--text-3);
@@ -245,8 +245,8 @@ a {
   gap: 10px;
   width: 100%;
   padding: 9px 12px;
-  border-radius: var(--radius-md);
-  font-size: 14px;
+  border-radius: var(--r-md);
+  font-size: var(--fs-base);
   font-weight: 600;
   color: var(--text-2);
   transition:

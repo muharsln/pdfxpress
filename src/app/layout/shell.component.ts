@@ -33,12 +33,12 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
         width: 100%;
         max-width: 800px;
         margin: 0 auto;
-        padding: 48px 40px;
+        padding: var(--s-xxxl) var(--s-xxl);
       }
       .logo-box {
         width: 36px;
         height: 36px;
-        border-radius: 10px;
+        border-radius: var(--r-md);
         background: var(--accent);
         display: flex;
         align-items: center;
@@ -57,7 +57,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
       }
       .section-lbl {
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: var(--fs-micro);
         font-weight: 500;
         letter-spacing: 0.1em;
         text-transform: uppercase;
@@ -78,9 +78,9 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
         align-items: center;
         gap: 10px;
         padding: 10px 12px;
-        border-radius: 10px;
+        border-radius: var(--r-md);
         width: 100%;
-        font-size: 14px;
+        font-size: var(--fs-base);
         font-weight: 600;
         color: var(--text-2);
         text-decoration: none;
@@ -125,8 +125,8 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
         gap: 10px;
         width: 100%;
         padding: 10px 12px;
-        border-radius: 10px;
-        font-size: 14px;
+        border-radius: var(--r-md);
+        font-size: var(--fs-base);
         font-weight: 600;
         color: var(--text-2);
         transition:
@@ -246,12 +246,12 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
           @if (!collapsed()) {
             <div style="min-width:0;" class="animate-fade-in">
               <div
-                style="font-size:15px;font-weight:800;color:var(--text);white-space:nowrap;letter-spacing:-.02em;"
+                style="font-size:var(--fs-lg);font-weight:800;color:var(--text);white-space:nowrap;letter-spacing:-.02em;"
               >
                 PDF-Xpress
               </div>
               <div
-                style="font-family:var(--mono);font-size:9px;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase;"
+                style="font-family:var(--mono);font-size:var(--fs-micro);color:var(--text-3);letter-spacing:.12em;text-transform:uppercase;"
               >
                 Pro Edition
               </div>

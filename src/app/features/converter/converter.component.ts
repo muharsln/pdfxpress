@@ -13,50 +13,50 @@ import { ConverterStore } from './converter.store';
   styles: [
     `
       .page-header {
-        margin-bottom: 32px;
+        margin-bottom: var(--s-xl);
       }
       .eyebrow {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: var(--fs-xs);
         font-weight: 500;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--accent);
-        margin-bottom: 8px;
+        margin-bottom: var(--s-sm);
       }
       h1 {
-        font-size: 36px;
+        font-size: var(--fs-h1);
         font-weight: 800;
         letter-spacing: -0.03em;
         color: var(--text);
         line-height: 1.05;
       }
       .sub {
-        font-size: 14px;
+        font-size: var(--fs-base);
         color: var(--text-2);
-        margin-top: 8px;
+        margin-top: var(--s-sm);
       }
 
       /* Direction tabs */
       .mode-tabs {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 4px;
-        padding: 4px;
+        gap: var(--s-xs);
+        padding: var(--s-xs);
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: 14px;
-        margin-bottom: 28px;
+        border-radius: var(--r-lg);
+        margin-bottom: var(--s-xl);
       }
       .mode-tab {
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 6px;
-        padding: 14px 16px;
-        border-radius: 10px;
+        padding: 14px var(--s-md);
+        border-radius: var(--r-md);
         cursor: pointer;
-        font-size: 14px;
+        font-size: var(--fs-base);
         font-weight: 600;
         color: var(--text-3);
         transition: all 0.15s;
@@ -83,31 +83,31 @@ import { ConverterStore } from './converter.store';
       .file-preview {
         display: flex;
         align-items: center;
-        gap: 16px;
-        padding: 16px 20px;
-        border-radius: 14px;
+        gap: var(--s-md);
+        padding: var(--s-md) var(--s-lg);
+        border-radius: var(--r-lg);
         background: var(--surface);
         border: 1px solid var(--border);
         box-shadow: var(--shadow-sm);
-        margin-bottom: 24px;
+        margin-bottom: var(--s-lg);
       }
       .file-icon {
         width: 48px;
         height: 48px;
-        border-radius: 12px;
+        border-radius: var(--r-md);
         flex-shrink: 0;
         background: rgba(239, 68, 68, 0.08);
         border: 1px solid rgba(239, 68, 68, 0.15);
-        color: #ef4444;
+        color: var(--red);
         display: flex;
         align-items: center;
         justify-content: center;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: var(--fs-xs);
         font-weight: 800;
       }
       .file-name {
-        font-size: 15px;
+        font-size: var(--fs-lg);
         font-weight: 700;
         color: var(--text);
       }
@@ -121,15 +121,15 @@ import { ConverterStore } from './converter.store';
       .options-card {
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 20px;
-        margin-bottom: 24px;
+        border-radius: var(--r-lg);
+        padding: var(--s-lg);
+        margin-bottom: var(--s-lg);
         box-shadow: var(--shadow-sm);
       }
       .options-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 16px;
+        gap: var(--s-md);
       }
       .option-group {
         display: flex;
@@ -137,7 +137,7 @@ import { ConverterStore } from './converter.store';
         gap: 6px;
       }
       .option-label {
-        font-size: 13px;
+        font-size: var(--fs-sm);
         font-weight: 600;
         color: var(--text-2);
       }
@@ -147,9 +147,9 @@ import { ConverterStore } from './converter.store';
         padding: 11px 14px;
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: 10px;
+        border-radius: var(--r-md);
         color: var(--text);
-        font-size: 14px;
+        font-size: var(--fs-base);
         font-family: var(--font);
         outline: none;
         transition:
@@ -182,7 +182,7 @@ import { ConverterStore } from './converter.store';
 
       /* Range input */
       .range-row {
-        margin-bottom: 20px;
+        margin-bottom: var(--s-lg);
       }
       .input-hint {
         font-size: 12px;
@@ -194,23 +194,23 @@ import { ConverterStore } from './converter.store';
       .images-card {
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 14px;
+        border-radius: var(--r-lg);
         overflow: hidden;
-        margin-bottom: 24px;
+        margin-bottom: var(--s-lg);
       }
       .images-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 14px 20px;
+        padding: 14px var(--s-lg);
         border-bottom: 1px solid var(--border);
         background: var(--surface-2);
       }
       .images-count {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        font-size: 13px;
+        gap: var(--s-sm);
+        font-size: var(--fs-sm);
         font-weight: 700;
         color: var(--text-2);
       }
@@ -218,7 +218,7 @@ import { ConverterStore } from './converter.store';
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         gap: 12px;
-        padding: 20px;
+        padding: var(--s-lg);
         max-height: 280px;
         overflow-y: auto;
       }
@@ -248,11 +248,11 @@ import { ConverterStore } from './converter.store';
         justify-content: center;
         min-width: 24px;
         height: 24px;
-        padding: 0 8px;
-        border-radius: 6px;
+        padding: 0 var(--s-sm);
+        border-radius: var(--r-xs);
         background: var(--accent);
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: var(--fs-xs);
         font-weight: 700;
         color: #fff;
       }
@@ -265,13 +265,13 @@ import { ConverterStore } from './converter.store';
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 12px 16px;
-        border-radius: 10px;
-        margin-top: 16px;
+        padding: 12px var(--s-md);
+        border-radius: var(--r-md);
+        margin-top: var(--s-md);
         border: 1px solid rgba(239, 68, 68, 0.2);
         background: var(--red-subtle);
         color: var(--red);
-        font-size: 13px;
+        font-size: var(--fs-sm);
         font-weight: 600;
       }
     `,
@@ -307,7 +307,7 @@ import { ConverterStore } from './converter.store';
             <line x1="12" y1="18" x2="12" y2="12" />
           </svg>
           <span>PDF'den Görsele</span>
-          <span style="font-size:11px;font-family:var(--mono);color:var(--text-3);"
+          <span style="font-size:var(--fs-xs);font-family:var(--mono);color:var(--text-3);"
             >PNG · JPEG · WebP</span
           >
         </button>
@@ -331,7 +331,7 @@ import { ConverterStore } from './converter.store';
             <path d="M21 15l-5-5L5 21" />
           </svg>
           <span>Görselden PDF'e</span>
-          <span style="font-size:11px;font-family:var(--mono);color:var(--text-3);"
+          <span style="font-size:var(--fs-xs);font-family:var(--mono);color:var(--text-3);"
             >JPG · PNG · WebP</span
           >
         </button>

@@ -21,33 +21,33 @@ import { PdfFile } from '../../core/models/pdf-file.model';
   styles: [
     `
       .page-header {
-        margin-bottom: 32px;
+        margin-bottom: var(--s-xl);
       }
       .eyebrow {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: var(--fs-xs);
         font-weight: 500;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--accent);
-        margin-bottom: 8px;
+        margin-bottom: var(--s-sm);
       }
       h1 {
-        font-size: 36px;
+        font-size: var(--fs-h1);
         font-weight: 800;
         letter-spacing: -0.03em;
         color: var(--text);
         line-height: 1.05;
       }
       .sub {
-        font-size: 14px;
+        font-size: var(--fs-base);
         color: var(--text-2);
-        margin-top: 8px;
+        margin-top: var(--s-sm);
       }
 
       .file-card {
         border: 1px solid var(--border);
-        border-radius: 14px;
+        border-radius: var(--r-lg);
         background: var(--surface);
         box-shadow: var(--shadow-sm);
         overflow: hidden;
@@ -56,7 +56,7 @@ import { PdfFile } from '../../core/models/pdf-file.model';
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 14px 20px;
+        padding: 14px var(--s-lg);
         border-bottom: 1px solid var(--border);
         background: var(--surface-2);
       }
@@ -66,8 +66,8 @@ import { PdfFile } from '../../core/models/pdf-file.model';
         justify-content: center;
         min-width: 26px;
         height: 26px;
-        padding: 0 8px;
-        border-radius: 8px;
+        padding: 0 var(--s-sm);
+        border-radius: var(--r-sm);
         background: var(--accent);
         font-family: var(--mono);
         font-size: 12px;
@@ -80,7 +80,7 @@ import { PdfFile } from '../../core/models/pdf-file.model';
         gap: 10px;
       }
       .card-header-title {
-        font-size: 13px;
+        font-size: var(--fs-sm);
         font-weight: 700;
         color: var(--text-2);
       }
@@ -93,8 +93,8 @@ import { PdfFile } from '../../core/models/pdf-file.model';
       .file-row {
         display: flex;
         align-items: center;
-        gap: 14px;
-        padding: 14px 20px;
+        gap: var(--s-md);
+        padding: 14px var(--s-lg);
         border-bottom: 1px solid var(--border);
         transition: background 0.12s;
       }
@@ -107,24 +107,24 @@ import { PdfFile } from '../../core/models/pdf-file.model';
 
       .row-num {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: var(--fs-xs);
         color: var(--text-4);
-        width: 20px;
+        width: var(--s-lg);
         text-align: center;
         flex-shrink: 0;
       }
       .pdf-icon {
         width: 38px;
         height: 38px;
-        border-radius: 10px;
+        border-radius: var(--r-md);
         background: rgba(239, 68, 68, 0.08);
         border: 1px solid rgba(239, 68, 68, 0.15);
-        color: #ef4444;
+        color: var(--red);
         display: flex;
         align-items: center;
         justify-content: center;
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: var(--fs-micro);
         font-weight: 800;
         flex-shrink: 0;
       }
@@ -133,7 +133,7 @@ import { PdfFile } from '../../core/models/pdf-file.model';
         min-width: 0;
       }
       .file-name {
-        font-size: 14px;
+        font-size: var(--fs-base);
         font-weight: 600;
         color: var(--text);
         white-space: nowrap;
@@ -142,7 +142,7 @@ import { PdfFile } from '../../core/models/pdf-file.model';
       }
       .file-meta {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: var(--fs-xs);
         color: var(--text-3);
         margin-top: 1px;
       }
@@ -151,7 +151,7 @@ import { PdfFile } from '../../core/models/pdf-file.model';
         cursor: grab;
         color: var(--text-4);
         padding: 4px;
-        border-radius: 6px;
+        border-radius: var(--r-xs);
         transition:
           color 0.12s,
           background 0.12s;
@@ -168,7 +168,7 @@ import { PdfFile } from '../../core/models/pdf-file.model';
       .remove-btn {
         opacity: 0;
         padding: 6px;
-        border-radius: 8px;
+        border-radius: var(--r-sm);
         color: var(--text-3);
         flex-shrink: 0;
         transition:
@@ -185,7 +185,7 @@ import { PdfFile } from '../../core/models/pdf-file.model';
       }
 
       .card-footer {
-        padding: 16px 20px;
+        padding: var(--s-md) var(--s-lg);
         border-top: 1px solid var(--border);
         background: var(--surface-2);
       }
@@ -193,11 +193,11 @@ import { PdfFile } from '../../core/models/pdf-file.model';
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: 16px;
+        margin-top: var(--s-md);
       }
       .total-label {
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: var(--fs-micro);
         text-transform: uppercase;
         letter-spacing: 0.1em;
         color: var(--text-3);
@@ -211,7 +211,7 @@ import { PdfFile } from '../../core/models/pdf-file.model';
         margin-top: 2px;
       }
       .total-val span {
-        font-size: 13px;
+        font-size: var(--fs-sm);
         font-weight: 600;
         color: var(--text-2);
         margin-left: 4px;
@@ -221,12 +221,12 @@ import { PdfFile } from '../../core/models/pdf-file.model';
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 12px 16px;
-        border-radius: 10px;
+        padding: 12px var(--s-md);
+        border-radius: var(--r-md);
         border: 1px solid rgba(239, 68, 68, 0.2);
         background: var(--red-subtle);
         color: var(--red);
-        font-size: 13px;
+        font-size: var(--fs-sm);
         font-weight: 600;
       }
     `,
@@ -371,7 +371,7 @@ import { PdfFile } from '../../core/models/pdf-file.model';
 
       <!-- Error -->
       @if (store.error()) {
-        <div class="error-bar" style="margin-top:16px;">
+        <div class="error-bar" style="margin-top:var(--s-md);">
           <span>{{ store.error() }}</span>
           <button class="btn-ghost" (click)="store.clearError()">
             <svg

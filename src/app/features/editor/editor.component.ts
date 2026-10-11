@@ -13,37 +13,37 @@ import { TextItem } from '../../core/models/worker-types';
   styles: [
     `
       .page-header {
-        margin-bottom: 32px;
+        margin-bottom: var(--s-xl);
       }
       .eyebrow {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: var(--fs-xs);
         font-weight: 500;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--accent);
-        margin-bottom: 8px;
+        margin-bottom: var(--s-sm);
       }
       h1 {
-        font-size: 36px;
+        font-size: var(--fs-h1);
         font-weight: 800;
         letter-spacing: -0.03em;
         color: var(--text);
         line-height: 1.05;
       }
       .sub {
-        font-size: 14px;
+        font-size: var(--fs-base);
         color: var(--text-2);
-        margin-top: 8px;
+        margin-top: var(--s-sm);
       }
 
       .toolbar {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 12px 16px;
-        border-radius: 12px;
-        margin-bottom: 20px;
+        padding: 12px var(--s-md);
+        border-radius: var(--r-md);
+        margin-bottom: var(--s-lg);
         background: var(--surface);
         border: 1px solid var(--border);
         box-shadow: var(--shadow-sm);
@@ -56,26 +56,26 @@ import { TextItem } from '../../core/models/worker-types';
       .file-icon {
         width: 38px;
         height: 38px;
-        border-radius: 10px;
+        border-radius: var(--r-md);
         flex-shrink: 0;
         background: rgba(239, 68, 68, 0.08);
         border: 1px solid rgba(239, 68, 68, 0.15);
-        color: #ef4444;
+        color: var(--red);
         display: flex;
         align-items: center;
         justify-content: center;
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: var(--fs-micro);
         font-weight: 800;
       }
       .file-name {
-        font-size: 14px;
+        font-size: var(--fs-base);
         font-weight: 700;
         color: var(--text);
       }
       .file-meta {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: var(--fs-xs);
         color: var(--text-3);
         margin-top: 1px;
       }
@@ -91,20 +91,20 @@ import { TextItem } from '../../core/models/worker-types';
         align-items: center;
         gap: 4px;
         padding: 4px;
-        margin-right: 12px;
+        margin-right: var(--s-md);
         background: var(--surface-2);
-        border-radius: 8px;
+        border-radius: var(--r-sm);
         border: 1px solid var(--border);
       }
       .nav-btn {
         width: 28px;
         height: 28px;
-        border-radius: 6px;
+        border-radius: var(--r-xs);
         display: flex;
         align-items: center;
         justify-content: center;
         color: var(--text-2);
-        font-size: 13px;
+        font-size: var(--fs-sm);
         cursor: pointer;
         font-weight: 700;
         transition:
@@ -133,9 +133,9 @@ import { TextItem } from '../../core/models/worker-types';
         margin: 0 auto;
         max-width: 100%;
         overflow: auto;
-        padding: 24px;
+        padding: var(--s-lg);
         background: var(--surface-2);
-        border-radius: var(--radius-lg);
+        border-radius: var(--r-lg);
         border: 1px solid var(--border);
         display: flex;
         justify-content: center;
@@ -242,13 +242,13 @@ import { TextItem } from '../../core/models/worker-types';
       }
 
       .warning-box {
-        padding: 12px 16px;
-        border-radius: 10px;
-        margin-bottom: 24px;
+        padding: 12px var(--s-md);
+        border-radius: var(--r-md);
+        margin-bottom: var(--s-lg);
         background: rgba(245, 158, 11, 0.1);
         border: 1px solid rgba(245, 158, 11, 0.2);
         color: #d97706;
-        font-size: 13px;
+        font-size: var(--fs-sm);
         font-weight: 500;
         display: flex;
         gap: 12px;
@@ -257,7 +257,7 @@ import { TextItem } from '../../core/models/worker-types';
       .footer-row {
         display: flex;
         justify-content: flex-end;
-        margin-top: 24px;
+        margin-top: var(--s-lg);
       }
     `,
   ],
